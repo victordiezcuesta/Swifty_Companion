@@ -1,37 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import SearchScreen from './src/screens/SearchScreen';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Swifty Companion</Text>
-
-      <Text style={styles.subtitle}>
-        Search for a 42 student
-      </Text>
-
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <SearchScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-
-  subtitle: {
-    fontSize: 18,
-    color: '#666',
-  },
-});
