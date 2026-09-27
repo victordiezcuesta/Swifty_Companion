@@ -8,12 +8,13 @@ export default function SearchScreen()
 
 	const handleSearch = () =>
 	{
-		console.log(login); //en la consola muestra el login que hemos ntroducido
 		if (login.trim() === '')
 		{
 			setError('Please enter a login.');
 			return;
 		}
+		setError(''); //cuadno el usuario sea valido limpiamos el error
+		console.log(login); //en la consola muestra el login que hemos ntroducido
 	};
 
 	return (
@@ -31,6 +32,10 @@ export default function SearchScreen()
 				value={login} //guardamos el valor  que introducimos en la variable login
 				onChangeText={setLogin} //cada vez que escribamos algo actualizamos la variable login
 			/>
+
+			{error !== '' && (
+				<Text style={styles.error}>{error}</Text>
+			)}
 
 			<TouchableOpacity
 				style={styles.button}
@@ -89,5 +94,10 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		fontSize: 16,
 		fontWeight: 'bold',
+	},
+
+	error: {
+		color: 'red',
+		marginBottom: 15,
 	},
 });
