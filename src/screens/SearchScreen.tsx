@@ -1,6 +1,13 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
 
 export default function SearchScreen() {
+  const [login, setLogin] = useState('');
+
+  const handleSearch = () => {
+    console.log(login); //en la consola muestra el login que hemos ntroducido
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Swifty Companion</Text>
@@ -13,9 +20,14 @@ export default function SearchScreen() {
         style={styles.input}
         placeholder="Enter login..."
         placeholderTextColor="#999"
+        value={login} //guardamos el valor  que introducimos en la variable login
+        onChangeText={setLogin} //cada vez que escribamos algo actualizamos la variable login
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSearch} //Cuando el usuario pulse este botón, ejecuta handleSearch
+      >
         <Text style={styles.buttonText}>SEARCH</Text>
       </TouchableOpacity>
     </View>
