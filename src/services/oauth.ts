@@ -1,18 +1,32 @@
 import * as AuthSession from 'expo-auth-session';
 
 const clientId = process.env.EXPO_PUBLIC_42_CLIENT_ID;
-
 const redirectUri = AuthSession.makeRedirectUri({
 	scheme: 'swiftycompanion',
 	path: 'oauth',
 });
+const discovery = {
+	authorizationEndpoint: 'https://api.intra.42.fr/oauth/authorize',
+};
 
-//URL utilizada para iniciar el proceso OAuth.
-const authorizationUrl =
-	`https://api.intra.42.fr/oauth/authorize` + //endpoint que utilizamos para iniciar la autorización OAuth
-	`?client_id=${clientId}` + //el id de la aplicacion de la intra
-	`&redirect_uri=${encodeURIComponent(redirectUri)}` + //despues del login vuelve a swiftycompanion://oauth | lo del enconde es porque usamos caracteres especiales como /
-	`&response_type=code`; //Este parámetro le dice a 42 qué queremos recibir después de la autenticación
+export async function loginWith42()
+{
+	const request = new AuthSession.AuthRequest({
+		clientId: clientId!,
+		redirectUri,
+		responseType: AuthSession.ResponseType.Code,
+	});
 
-console.log('Redirect URI:', redirectUri);
-console.log('Authorization URL:', authorizationUrl);
+	const result = await request.promptAsync(discovery);
+
+	console.log('OAuth result:', result);
+
+	if (result.type !== 'success')
+		throw new Error('OAuth login failed');
+
+	const code = result.params.code;
+
+	console.log('Authorization code:', code);
+
+	return code;
+}

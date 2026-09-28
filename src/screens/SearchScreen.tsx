@@ -1,20 +1,30 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
+import { loginWith42 } from '../services/oauth';
 
 export default function SearchScreen()
 {
 	const [login, setLogin] = useState('');
 	const [error, setError] = useState(''); //guardamos el mensaje de error
 
-	const handleSearch = () =>
+	const handleSearch = async () =>
 	{
 		if (login.trim() === '')
 		{
 			setError('Please enter a login.');
 			return;
 		}
-		setError(''); //cuadno el usuario sea valido limpiamos el error
-		console.log(login); //en la consola muestra el login que hemos ntroducido
+		setError('');//cuadno el usuario sea valido limpiamos el error
+		try
+		{
+			const code = await loginWith42();
+			console.log('Received authorization code:', code);
+		}
+		catch (error)
+		{
+			console.error('OAuth error:', error);
+			setError('Login with 42 failed.');
+		}
 	};
 
 	return (
