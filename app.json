@@ -3,6 +3,7 @@
     "name": "Swifty_Companion",
     "slug": "Swifty_Companion",
     "version": "1.0.0",
+    "scheme": "swiftycompanion",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +17,8 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.Swifty_Companion"
     },
     "web": {
       "favicon": "./assets/favicon.png"
