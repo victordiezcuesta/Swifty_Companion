@@ -139,7 +139,7 @@ export const styles = StyleSheet.create({
 		gap: 12,
 		marginBottom: 12,
 	},
-	stat: {
+	InfoWalletEvalPoints: {
 		flex: 1,
 		backgroundColor: colors.surface,
 		borderRadius: radius.lg,
@@ -158,14 +158,14 @@ export const styles = StyleSheet.create({
 		color: colors.muted,
 		marginTop: 4,
 	},
-	infoRow: {
+	InfoLogin: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingVertical: 12,
 		borderBottomWidth: 1,
 		borderBottomColor: colors.border,
 	},
-	infoRowLast: {
+	InfoLoginLast: {
 		borderBottomWidth: 0,
 	},
 	infoLabel: {

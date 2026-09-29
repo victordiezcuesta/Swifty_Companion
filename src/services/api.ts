@@ -1,10 +1,11 @@
-const API_URL = 'https://api.intra.42.fr/v2';
+const API_URL = 'https://api.intra.42.fr/v2'; //la api que estamos consultando
 
 export async function getUser(login: string, accessToken: string)
 {
+	//encodeURIComponent por si hubiera caracteres especiales
 	const response = await fetch(`${API_URL}/users/${encodeURIComponent(login.toLowerCase())}`, {
 		headers: {
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${accessToken}`, //la peticion la hago mediante esta autentificacoin de token
 		},
 	});
 

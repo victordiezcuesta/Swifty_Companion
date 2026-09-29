@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+
 import { StatusBar } from 'expo-status-bar';
 
 import { User } from '../types';
@@ -8,22 +9,20 @@ import { styles } from '../style/styleProfileScreen';
 
 type Tab = 'skills' | 'projects';
 
-// Cuadro pequeño con un número grande y su etiqueta
-function Stat({ label, value }: { label: string; value: string | number })
+function InfoWalletEvalPoints({ label, value }: { label: string; value: string | number }) //funcoin auxiliar para los recuadros de wallet y eval points
 {
 	return (
-		<View style={styles.stat}>
+		<View style={styles.InfoWalletEvalPoints}>
 			<Text style={styles.statValue}>{value}</Text>
 			<Text style={styles.statLabel}>{label}</Text>
 		</View>
 	);
 }
 
-// Línea de detalle: etiqueta a la izquierda, valor a la derecha
-function InfoRow({ label, value, last }: { label: string; value: string; last?: boolean })
+function InfoLogin({ label, value, last }: { label: string; value: string; last?: boolean }) //funcoin auxiliar para la informacion de email y localizacion
 {
 	return (
-		<View style={[styles.infoRow, last && styles.infoRowLast]}>
+		<View style={[styles.InfoLogin, last && styles.InfoLoginLast]}>
 			<Text style={styles.infoLabel}>{label}</Text>
 			<Text style={styles.infoValue}>{value}</Text>
 		</View>
@@ -34,14 +33,14 @@ export default function ProfileScreen({ user, onBack }: { user: User; onBack: ()
 {
 	const [tab, setTab] = useState<Tab>('skills');
 
-	const cursus = user.cursus_users.find(c => c.cursus_id === 21)
-		?? user.cursus_users[user.cursus_users.length - 1];
+	const cursus = user.cursus_users.find(c => c.cursus_id === 21) //21 porque es el common core
+		?? user.cursus_users[user.cursus_users.length - 1]; // ?? si lo primero es null utilizado lo segundo(que es el ultimo curso que tenga)
 	const level = cursus ? cursus.level : 0;
 	const levelInt = Math.floor(level);
 	const levelDecimals = (level % 1).toFixed(2).slice(2); //"12.01" -> "01"
 	const levelPercent = (level % 1) * 100; //la parte decimal es el progreso al siguiente nivel
-	const skills = cursus ? [...cursus.skills].sort((a, b) => b.level - a.level) : [];
-	const projects = user.projects_users.filter(p => p.status === 'finished');
+	const skills = cursus ? [...cursus.skills].sort((a, b) => b.level - a.level) : []; //copia as skills y ordenalas
+	const projects = user.projects_users.filter(p => p.status === 'finished'); //solo los proyectos finalizados
 	const passed = projects.filter(p => p['validated?']).length;
 	const failed = projects.length - passed;
 
@@ -93,14 +92,14 @@ export default function ProfileScreen({ user, onBack }: { user: User; onBack: ()
 
 				{/* Números destacados */}
 				<View style={styles.statsRow}>
-					<Stat label="Wallet" value={user.wallet} />
-					<Stat label="Eval points" value={user.correction_point} />
+					<InfoWalletEvalPoints label="Wallet" value={user.wallet} />
+					<InfoWalletEvalPoints label="Eval points" value={user.correction_point} />
 				</View>
 
 				{/* Detalles */}
 				<View style={styles.card}>
-					<InfoRow label="Email" value={user.email} />
-					<InfoRow label="Location" value={user.location ?? 'Unavailable'} last />
+					<InfoLogin label="Email" value={user.email} />
+					<InfoLogin label="Location" value={user.location ?? 'Unavailable'} last />
 				</View>
 
 				{/* Selector Skills / Projects */}
@@ -127,7 +126,7 @@ export default function ProfileScreen({ user, onBack }: { user: User; onBack: ()
 					<View style={styles.card}>
 						{skills.map(s =>
 						{
-							const percent = Math.min((s.level / 20) * 100, 100);
+							const percent = Math.min((s.level / 20) * 100, 100); //tomamos el 100% como el nivel 20
 							return (
 								<View key={s.id} style={styles.skill}>
 									<View style={styles.skillRow}>

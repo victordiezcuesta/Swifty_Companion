@@ -18,10 +18,13 @@ export const colors = {
 
 export const radius = { sm: 8, md: 12, lg: 18 };
 
-// Fuente monoespaciada del sistema para números y logins
-export const mono = Platform.select({ ios: 'Menlo', android: 'monospace' });
+// adaptamos depende la plataforma
+export const mono = Platform.select({
+	ios: 'Menlo',
+	android: 'monospace'
+});
 
-// Espacio para no quedar debajo de la barra de estado
+// es el espacio que dejamos que es la barra de notificaiones del movil
 export const TOP_INSET = Platform.OS === 'android'
 	? (StatusBar.currentHeight ?? 24) + 6
 	: 54;
