@@ -1,11 +1,13 @@
 const TOKEN_URL = 'https://api.intra.42.fr/oauth/token';
-const clientId = process.env.EXPO_PUBLIC_42_CLIENT_ID;
-const clientSecret = process.env.EXPO_PUBLIC_42_CLIENT_SECRET;
+const clientId = process.env.EXPO_PUBLIC_UID_INTRA_42;
+const clientSecret = process.env.EXPO_PUBLIC_SECRET_INTRA_42;
 
 let accessToken: string | null = null;
 
 export async function getAccessToken(): Promise<string>
 {
+	if (!clientId || !clientSecret)
+		throw new Error('Missing UID or SECRET in .env');
 	if (accessToken)
 		return accessToken;
 
