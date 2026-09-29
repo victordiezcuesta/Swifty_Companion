@@ -1,34 +1,24 @@
-import * as AuthSession from 'expo-auth-session';
-
+const TOKEN_URL = 'https://api.intra.42.fr/oauth/token';
 const clientId = process.env.EXPO_PUBLIC_42_CLIENT_ID;
-const redirectUri = AuthSession.makeRedirectUri({
-	scheme: 'swiftycompanion',
-	path: 'oauth',
-});
-console.log('REDIRECT URI:', redirectUri);
+const clientSecret = process.env.EXPO_PUBLIC_42_CLIENT_SECRET;
 
-const discovery = {
-	authorizationEndpoint: 'https://api.intra.42.fr/oauth/authorize',
-};
+let accessToken: string | null = null;
 
-export async function loginWith42()
+export async function getAccessToken(): Promise<string>
 {
-	const request = new AuthSession.AuthRequest({
-		clientId: clientId!,
-		redirectUri,
-		responseType: AuthSession.ResponseType.Code,
+	if (accessToken)
+		return accessToken;
+
+	const response = await fetch(TOKEN_URL, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
 	});
 
-	const result = await request.promptAsync(discovery);
+	if (!response.ok)
+		throw new Error(`Token error: ${response.status}`);
 
-	console.log('OAuth result:', result);
-
-	if (result.type !== 'success')
-		throw new Error('OAuth login failed');
-
-	const code = result.params.code;
-
-	console.log('Authorization code:', code);
-
-	return code;
+	const data = await response.json();
+	accessToken = data.access_token;
+	return accessToken!;
 }

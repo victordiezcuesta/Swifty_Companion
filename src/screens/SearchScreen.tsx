@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
-import { loginWith42 } from '../services/oauth';
+import { getAccessToken } from '../services/oauth';
+import { getUser } from '../services/api';
 
 export default function SearchScreen()
 {
@@ -17,13 +18,19 @@ export default function SearchScreen()
 		setError('');//cuadno el usuario sea valido limpiamos el error
 		try
 		{
-			const code = await loginWith42();
-			console.log('Received authorization code:', code);
+			const token = await getAccessToken();
+			const user = await getUser(login.trim(), token);
+			console.log(user); // de momento, para ver los datos
 		}
 		catch (error)
 		{
-			console.error('OAuth error:', error);
-			setError('Login with 42 failed.');
+			if (error instanceof Error && error.message === 'USER_NOT_FOUND')
+				setError('User not found.');
+			else if (error instanceof TypeError)
+				setError('Network error. Check your connection.');
+			else
+				setError('Something went wrong. Try again.');
+			console.error(error);
 		}
 	};
 
