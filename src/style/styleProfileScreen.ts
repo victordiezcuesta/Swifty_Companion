@@ -1,0 +1,273 @@
+import { StyleSheet } from 'react-native';
+import { colors, mono, radius, TOP_INSET } from '../theme';
+
+export const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: colors.background,
+	},
+	topBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		paddingTop: TOP_INSET,
+		paddingBottom: 10,
+		paddingHorizontal: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.border,
+	},
+	backButton: {
+		width: 70,
+		paddingVertical: 6,
+		paddingHorizontal: 8,
+	},
+	backText: {
+		color: colors.accent,
+		fontSize: 16,
+		fontWeight: '600',
+	},
+	topTitle: {
+		color: colors.text,
+		fontSize: 16,
+		fontWeight: '700',
+	},
+	content: {
+		width: '100%',
+		maxWidth: 600,
+		alignSelf: 'center',
+		padding: 20,
+		paddingBottom: 48,
+	},
+	hero: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 20,
+	},
+	avatarRing: {
+		padding: 3,
+		borderRadius: 28,
+		borderWidth: 2,
+		borderColor: colors.accent,
+	},
+	avatar: {
+		width: 84,
+		height: 84,
+		borderRadius: 24,
+		backgroundColor: colors.surfaceAlt,
+	},
+	avatarPlaceholder: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	avatarInitial: {
+		fontSize: 34,
+		fontFamily: mono,
+		color: colors.muted,
+	},
+	heroInfo: {
+		flex: 1,
+		marginLeft: 16,
+		alignItems: 'flex-start',
+	},
+	name: {
+		fontSize: 22,
+		fontWeight: '800',
+		color: colors.text,
+		letterSpacing: -0.4,
+	},
+	loginPill: {
+		marginTop: 8,
+		paddingVertical: 3,
+		paddingHorizontal: 10,
+		borderRadius: radius.sm,
+		backgroundColor: colors.surfaceAlt,
+	},
+	loginText: {
+		fontSize: 13,
+		fontFamily: mono,
+		color: colors.muted,
+	},
+	card: {
+		backgroundColor: colors.surface,
+		borderRadius: radius.lg,
+		borderWidth: 1,
+		borderColor: colors.border,
+		padding: 18,
+		marginBottom: 12,
+	},
+	cardLabel: {
+		fontSize: 11,
+		letterSpacing: 1.5,
+		color: colors.muted,
+	},
+	levelRow: {
+		flexDirection: 'row',
+		alignItems: 'baseline',
+		marginTop: 6,
+		marginBottom: 12,
+	},
+	levelInt: {
+		fontSize: 44,
+		fontFamily: mono,
+		fontWeight: '700',
+		color: colors.text,
+	},
+	levelDecimals: {
+		fontSize: 22,
+		fontFamily: mono,
+		color: colors.accent,
+	},
+	levelPercent: {
+		flex: 1,
+		textAlign: 'right',
+		fontSize: 13,
+		color: colors.muted,
+	},
+	barBg: {
+		height: 6,
+		backgroundColor: colors.surfaceAlt,
+		borderRadius: 3,
+		overflow: 'hidden',
+	},
+	barFill: {
+		height: 6,
+		backgroundColor: colors.accent,
+		borderRadius: 3,
+	},
+	statsRow: {
+		flexDirection: 'row',
+		gap: 12,
+		marginBottom: 12,
+	},
+	stat: {
+		flex: 1,
+		backgroundColor: colors.surface,
+		borderRadius: radius.lg,
+		borderWidth: 1,
+		borderColor: colors.border,
+		padding: 16,
+	},
+	statValue: {
+		fontSize: 26,
+		fontFamily: mono,
+		fontWeight: '700',
+		color: colors.text,
+	},
+	statLabel: {
+		fontSize: 12,
+		color: colors.muted,
+		marginTop: 4,
+	},
+	infoRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.border,
+	},
+	infoRowLast: {
+		borderBottomWidth: 0,
+	},
+	infoLabel: {
+		fontSize: 14,
+		color: colors.muted,
+	},
+	infoValue: {
+		fontSize: 14,
+		fontFamily: mono,
+		color: colors.text,
+		flexShrink: 1,
+		marginLeft: 16,
+		textAlign: 'right',
+	},
+	segment: {
+		flexDirection: 'row',
+		backgroundColor: colors.surface,
+		borderRadius: radius.md,
+		borderWidth: 1,
+		borderColor: colors.border,
+		padding: 4,
+		marginTop: 8,
+		marginBottom: 12,
+	},
+	segmentItem: {
+		flex: 1,
+		paddingVertical: 10,
+		borderRadius: radius.sm,
+		alignItems: 'center',
+	},
+	segmentActive: {
+		backgroundColor: colors.accentSoft,
+	},
+	segmentText: {
+		fontSize: 14,
+		fontWeight: '600',
+		color: colors.muted,
+	},
+	segmentTextActive: {
+		color: colors.accent,
+	},
+	skill: {
+		marginBottom: 16,
+	},
+	skillRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 8,
+	},
+	skillName: {
+		fontSize: 15,
+		color: colors.text,
+		flexShrink: 1,
+		marginRight: 12,
+	},
+	skillValue: {
+		fontSize: 13,
+		fontFamily: mono,
+		color: colors.muted,
+	},
+	summaryRow: {
+		flexDirection: 'row',
+		gap: 12,
+		marginBottom: 12,
+	},
+	summary: {
+		flex: 1,
+		borderRadius: radius.md,
+		padding: 14,
+	},
+	summaryNumber: {
+		fontSize: 24,
+		fontFamily: mono,
+		fontWeight: '700',
+	},
+	summaryLabel: {
+		fontSize: 12,
+		color: colors.muted,
+		marginTop: 2,
+	},
+	project: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.border,
+	},
+	projectDot: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		marginRight: 12,
+	},
+	projectName: {
+		flex: 1,
+		fontSize: 15,
+		color: colors.text,
+		marginRight: 12,
+	},
+	projectMark: {
+		fontSize: 14,
+		fontFamily: mono,
+		fontWeight: '700',
+	},
+});
