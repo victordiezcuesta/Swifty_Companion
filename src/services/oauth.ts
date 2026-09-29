@@ -4,11 +4,12 @@ const clientSecret = process.env.EXPO_PUBLIC_SECRET_INTRA_42;
 
 let accessToken: string | null = null; // iniciamos la variabke que es un string en null
 
+//si dejamos la app abierta mas de dos horas el token de 42 caduca y no podremos hacer nuevas consultas si no abrimos y cerramos la app
 export async function getAccessToken(): Promise<string>
 {
 	if (!clientId || !clientSecret)
 		throw new Error('Missing UID or SECRET in .env');
-	if (accessToken) //si tenemos ya un token lo reutilizamos
+	if (accessToken) //si tenemos ya un token lo reutilizamos nucna miramos si ha caducado
 		return accessToken;
 
 	const response = await fetch(TOKEN_URL, { //peticion http

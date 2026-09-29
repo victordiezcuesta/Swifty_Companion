@@ -14,7 +14,7 @@ export async function getUser(login: string, accessToken: string)
 	if (!response.ok)
 		throw new Error(`API error: ${response.status}`);
 
-	//log del json
+	//log del json defensa
 	/*const data = await response.json();
 	console.log(JSON.stringify(data));
 	//console.log(JSON.stringify(data, null, 2));

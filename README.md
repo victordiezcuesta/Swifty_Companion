@@ -331,8 +331,8 @@ The project includes a small Makefile to simplify the development workflow.
 |---|---|
 | `make start` | Starts Expo with the development client |
 | `make cluster` | Configures ADB reverse and starts Expo locally |
-| `make clean` | Removes Expo generated files |
-| `make fclean` | Removes Expo files and `node_modules` |
+| `make bonus` | Starts Expo with the development client with subject bonus |
+| `make bonus-cluster` | Configures ADB reverse and starts Expo locally with subject bonus |
 
 ---
 

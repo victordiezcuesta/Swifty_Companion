@@ -1,17 +1,15 @@
-.PHONY: start cluster android ios web clean fclean
+.PHONY: start cluster bonus bonus-cluster
 
 start:
-	npm run start --dev-client
+	EXPO_PUBLIC_BONUS=0 npm run start --dev-client -c
 
 cluster:
 	adb reverse tcp:8081 tcp:8081
-	npx expo start --dev-client --localhost
+	EXPO_PUBLIC_BONUS=0 npx expo start --dev-client --localhost -c
 
-android:
-	npm run android
+bonus:
+	EXPO_PUBLIC_BONUS=1 npm run start --dev-client -c
 
-clean:
-	rm -rf .expo
-
-fclean: clean
-	rm -rf node_modules
+bonus-cluster:
+	adb reverse tcp:8081 tcp:8081
+	EXPO_PUBLIC_BONUS=1 npx expo start --dev-client --localhost -c

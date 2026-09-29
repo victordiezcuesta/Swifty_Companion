@@ -25,6 +25,7 @@ SCRIPT_NAME="$(basename "$0")"
 		-path "./.git" -prune -o \
 		-type f \
 		! -name "notas-swifty.txt" \
+		! -name "README.md" \
 		! -name "package-lock.json" \
 		! -name "LICENSE" \
 		! -name "AGENTS.md" \
