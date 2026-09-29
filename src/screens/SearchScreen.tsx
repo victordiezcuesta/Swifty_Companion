@@ -2,11 +2,13 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { useState } from 'react';
 import { getAccessToken } from '../services/oauth';
 import { getUser } from '../services/api';
+import { User } from '../types';
 
-export default function SearchScreen()
+export default function SearchScreen({ onFound }: { onFound: (user: User) => void })
 {
 	const [login, setLogin] = useState('');
 	const [error, setError] = useState(''); //guardamos el mensaje de error
+	const [loading, setLoading] = useState(false);
 
 	const handleSearch = async () =>
 	{
@@ -16,11 +18,12 @@ export default function SearchScreen()
 			return;
 		}
 		setError('');//cuadno el usuario sea valido limpiamos el error
+		setLoading(true);
 		try
 		{
 			const token = await getAccessToken();
 			const user = await getUser(login.trim(), token);
-			console.log(user); // de momento, para ver los datos
+			onFound(user);
 		}
 		catch (error)
 		{
@@ -31,6 +34,10 @@ export default function SearchScreen()
 			else
 				setError('Something went wrong. Try again.');
 			console.error(error);
+		}
+		finally
+		{
+			setLoading(false);
 		}
 	};
 
