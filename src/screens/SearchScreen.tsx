@@ -1,10 +1,54 @@
-import { ActivityIndicator, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Image, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
 import { getAccessToken } from '../services/oauth';
 import { getUser } from '../services/api';
 import { User } from '../types';
-import { colors, mono, radius } from '../theme';
+import { colors, mono, radius, TOP_INSET } from '../theme';
+
+const logo = require('../../assets/logo-42madrid.png');
+// Calculamos el ancho a partir de la proporción real del logo para que quede pegado a la izquierda
+const LOGO_HEIGHT = 110;
+const { width: logoW, height: logoH } = Image.resolveAssetSource(logo);
+const LOGO_WIDTH = (LOGO_HEIGHT * logoW) / logoH;
+
+// Tres puntos que se encienden uno tras otro mientras se carga
+function ThinkingDots()
+{
+	const dots = useRef([0, 1, 2].map(() => new Animated.Value(0.3))).current;
+
+	useEffect(() =>
+	{
+		// Cada punto sube y baja; el retraso inicial los desfasa entre sí
+		const loops = dots.map((dot, i) => Animated.loop(
+			Animated.sequence([
+				Animated.delay(i * 160),
+				Animated.timing(dot, { toValue: 1, duration: 400, useNativeDriver: true }),
+				Animated.timing(dot, { toValue: 0.3, duration: 400, useNativeDriver: true }),
+				Animated.delay((2 - i) * 160),
+			])
+		));
+		loops.forEach(l => l.start());
+		return () => loops.forEach(l => l.stop());
+	}, [dots]);
+
+	return (
+		<View style={styles.dotsRow}>
+			{dots.map((dot, i) => (
+				<Animated.View
+					key={i}
+					style={[
+						styles.dot,
+						{
+							opacity: dot,
+							transform: [{ scale: dot.interpolate({ inputRange: [0.3, 1], outputRange: [0.8, 1.25] }) }],
+						},
+					]}
+				/>
+			))}
+		</View>
+	);
+}
 
 export default function SearchScreen({ onFound }: { onFound: (user: User) => void })
 {
@@ -20,6 +64,7 @@ export default function SearchScreen({ onFound }: { onFound: (user: User) => voi
 			setError('Please enter a login.');
 			return;
 		}
+		Keyboard.dismiss();
 		setError('');//cuando el usuario sea valido limpiamos el error
 		setLoading(true);
 		try
@@ -45,119 +90,140 @@ export default function SearchScreen({ onFound }: { onFound: (user: User) => voi
 	};
 
 	return (
-		// El KeyboardAvoidingView sube el panel cuando aparece el teclado
 		<KeyboardAvoidingView style={styles.container} behavior="padding">
-			<StatusBar style="dark" />
+			<StatusBar style="light" />
 
-			{/* Zona superior clara con el logo */}
-			<View style={styles.hero}>
-				<Image
-					source={require('../../assets/logo-42madrid.png')}
-					style={styles.logo}
-					resizeMode="contain"
-				/>
-				<Text style={styles.brand}>SWIFTY COMPANION</Text>
+			<View style={styles.topBar}>
+				<Text style={styles.brand}>Swifty Companion</Text>
 			</View>
 
-			{/* Panel oscuro con el formulario */}
-			<View style={styles.sheet}>
-				{/* Limitamos el ancho para que en tablets no quede estirado */}
-				<View style={styles.form}>
-					<Text style={styles.title}>Find a student</Text>
-					<Text style={styles.subtitle}>
-						Enter a 42 login to see their level, skills and projects.
-					</Text>
+			<View style={styles.center}>
+				<View style={styles.content}>
+				{loading ? (
+					<View style={styles.loadingBox}>
+						<ThinkingDots />
+						<Text style={styles.loadingTitle}>
+						Searching @{login.trim()}
+						</Text>
+						<Text style={styles.loadingSub}>
+						Fetching the profile from the intra…
+						</Text>
+					</View>
+				) : (
+					<>
+						<Image
+						source={logo}
+						style={[
+							styles.logo,
+							{
+								width: LOGO_WIDTH,
+								height: LOGO_HEIGHT,
+							},
+						]}
+						/>
 
-					<View style={[styles.inputBox, focused && styles.inputBoxFocused]}>
+						<Text style={styles.title}>
+						Search a student
+						</Text>
+
+						<Text style={styles.subtitle}>
+						Enter a 42 login to see their level, skills and projects.
+						</Text>
+
+						<View
+						style={[
+							styles.inputBox,
+							focused && styles.inputBoxFocused,
+						]}
+						>
 						<Text style={styles.prefix}>@</Text>
+
 						<TextInput
 							style={styles.input}
 							placeholder="login"
 							placeholderTextColor={colors.muted}
-							value={login} //guardamos el valor que introducimos en la variable login
-							onChangeText={setLogin} //cada vez que escribamos algo actualizamos la variable login
+							value={login}
+							onChangeText={setLogin}
 							onFocus={() => setFocused(true)}
 							onBlur={() => setFocused(false)}
-							onSubmitEditing={handleSearch} //buscar con la tecla del teclado
+							onSubmitEditing={handleSearch}
 							autoCapitalize="none"
 							autoCorrect={false}
 							returnKeyType="search"
 						/>
-					</View>
+						</View>
 
-					{error !== '' && (
+						{error !== '' && (
 						<View style={styles.errorBox}>
 							<Text style={styles.errorText}>{error}</Text>
 						</View>
-					)}
+						)}
 
-					<TouchableOpacity
-						style={[styles.button, loading && styles.buttonDisabled]}
-						onPress={handleSearch} //Cuando el usuario pulse este botón, ejecuta handleSearch
-						disabled={loading}
+						<TouchableOpacity
+						style={styles.button}
+						onPress={handleSearch}
 						activeOpacity={0.85}
-					>
-						{loading
-							? <ActivityIndicator color={colors.background} />
-							: <Text style={styles.buttonText}>Search</Text>}
-					</TouchableOpacity>
-
-					<Text style={styles.footer}>Data from the 42 intra API</Text>
+						>
+						<Text style={styles.buttonText}>
+							Search →
+						</Text>
+						</TouchableOpacity>
+					</>
+				)}
 				</View>
 			</View>
 		</KeyboardAvoidingView>
-	);
+		);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: colors.paper,
-	},
-	hero: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingHorizontal: 32,
-	},
-	logo: {
-		width: '100%',
-		maxWidth: 240,
-		height: 100,
-		tintColor: colors.background, //pinta el logo de negro aunque el PNG sea de otro color
-	},
-	brand: {
-		marginTop: 16,
-		fontSize: 12,
-		fontFamily: mono,
-		letterSpacing: 3,
-		color: '#5B5F6B',
-	},
-	sheet: {
 		backgroundColor: colors.background,
-		borderTopLeftRadius: 32,
-		borderTopRightRadius: 32,
-		paddingHorizontal: 24,
-		paddingTop: 32,
-		paddingBottom: 36,
 	},
-	form: {
+	topBar: {
+		paddingTop: TOP_INSET,
+		paddingBottom: 14,
+		paddingHorizontal: 20,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.border,
+	},
+	center: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingHorizontal: 24,
+	},
+	content: {
 		width: '100%',
 		maxWidth: 420,
 		alignSelf: 'center',
 	},
+	brand: {
+		fontSize: 17,
+		fontWeight: '700',
+		color: colors.text,
+		letterSpacing: -0.2,
+	},
+	logo: {
+		alignSelf: 'center', //centra el logo horizontalmente
+		marginBottom: 32,
+		tintColor: '#FFFFFF', //lo pinta de blanco
+	},
 	title: {
-		fontSize: 26,
+		fontSize: 30,
 		fontWeight: '800',
 		color: colors.text,
-		letterSpacing: -0.5,
+		letterSpacing: -0.6,
+		textAlign: 'center',
 	},
 	subtitle: {
 		fontSize: 14,
 		lineHeight: 21,
 		color: colors.muted,
 		marginTop: 6,
-		marginBottom: 24,
+		marginBottom: 28,
+		textAlign: 'center',
 	},
 	inputBox: {
 		flexDirection: 'row',
@@ -203,18 +269,39 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginTop: 16,
 	},
-	buttonDisabled: {
-		opacity: 0.6,
-	},
 	buttonText: {
 		color: colors.background,
 		fontSize: 16,
 		fontWeight: '700',
 	},
+	loadingBox: {
+		alignItems: 'center',
+	},
+	dotsRow: {
+		flexDirection: 'row',
+		gap: 10,
+		marginBottom: 24,
+	},
+	dot: {
+		width: 12,
+		height: 12,
+		borderRadius: 6,
+		backgroundColor: colors.accent,
+	},
+	loadingTitle: {
+		fontSize: 17,
+		fontFamily: mono,
+		color: colors.text,
+	},
+	loadingSub: {
+		fontSize: 13,
+		color: colors.muted,
+		marginTop: 6,
+	},
 	footer: {
 		textAlign: 'center',
 		fontSize: 12,
 		color: colors.muted,
-		marginTop: 20,
+		paddingBottom: 28,
 	},
 });
