@@ -9,7 +9,7 @@ SCRIPT_NAME="$(basename "$0")"
 	echo "========================================"
 	echo
 
-	tree -I ".expo|android|node_modules|assets|notas-swifty.txt|$SCRIPT_NAME"
+	tree -I ".expo|android|node_modules|notas-swifty.txt|$SCRIPT_NAME"
 
 	echo
 	echo
