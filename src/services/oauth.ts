@@ -5,6 +5,8 @@ const redirectUri = AuthSession.makeRedirectUri({
 	scheme: 'swiftycompanion',
 	path: 'oauth',
 });
+console.log('REDIRECT URI:', redirectUri);
+
 const discovery = {
 	authorizationEndpoint: 'https://api.intra.42.fr/oauth/authorize',
 };
