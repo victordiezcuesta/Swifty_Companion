@@ -11,7 +11,9 @@ import { styles } from '../style/styleSearchScreen';
 
 const logo = require('../../assets/logo-42madrid.png');
 const LOGO_HEIGHT = 110;
-const { width: logoW, height: logoH } = Image.resolveAssetSource(logo);
+const logoSource = Image.resolveAssetSource(logo);
+const logoW = logoSource?.width ?? 1; //?. es que accedemos a la propiedad solo si el objeto existe, si no existe devolvemos undefined en vez de lanzar error
+const logoH = logoSource?.height ?? 1; // ?? es que si lo de la izquierda es undefined devolvemos lo de la derecha
 const LOGO_WIDTH = (LOGO_HEIGHT * logoW) / logoH;
 
 function LoadingAnimation() //funcion auxiliar para que aparezca la animacion de los 3 puntos mientras espera la respuesta de la api
