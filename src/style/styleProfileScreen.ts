@@ -45,9 +45,10 @@ export const styles = StyleSheet.create({
 	},
 	avatarRing: {
 		padding: 3,
-		borderRadius: 28,
+		borderRadius: 29,
 		borderWidth: 2,
 		borderColor: colors.accent,
+		overflow: 'hidden',
 	},
 	avatar: {
 		width: 84,

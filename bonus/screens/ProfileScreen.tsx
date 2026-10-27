@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { User } from '../types';
 import { colors} from '../theme';
 import { styles } from '../style/styleProfileScreen';
+import { getAccessToken } from '../services/oauth';
 
 type Tab = 'skills' | 'projects';
 
@@ -27,6 +28,63 @@ function InfoLogin({ label, value, last }: { label: string; value: string; last?
 			<Text style={styles.infoValue}>{value}</Text>
 		</View>
 	);
+}
+
+function AuthenticatedImage({ uri, login }: { uri: string, login: string })
+{
+	const [imageUri, setImageUri] = useState<string | null>(null);
+
+	useEffect(() =>
+	{
+		let active = true;
+
+		async function loadImage()
+		{
+			try
+			{
+				const token = await getAccessToken();
+				const response = await fetch(uri, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+
+				if (!response.ok)
+					throw new Error(`Image error: ${response.status}`);
+
+				const blob = await response.blob();
+				const reader = new FileReader();
+
+				reader.onloadend = () =>
+				{
+					if (active && typeof reader.result === 'string')
+						setImageUri(reader.result);
+				};
+
+				reader.readAsDataURL(blob);
+			}
+			catch (error)
+			{
+				console.error('Error loading profile image:', error);
+			}
+		}
+		loadImage();
+		return () =>
+		{
+			active = false;
+		};
+	}, [uri]);
+
+	if (!imageUri)
+		return (
+			<View style={[styles.avatar, styles.avatarPlaceholder]}>
+				<Text style={styles.avatarInitial}>
+				{login[0].toUpperCase()}
+				</Text>
+			</View>
+		);
+
+	return <Image source={{ uri: imageUri }} style={styles.avatar} />;
 }
 
 export default function ProfileScreen({ user, onBack }: { user: User; onBack: () => void })
@@ -61,13 +119,15 @@ export default function ProfileScreen({ user, onBack }: { user: User; onBack: ()
 				{/* Cabecera del usuario */}
 				<View style={styles.hero}>
 					<View style={styles.avatarRing}>
-						{user.image.link
-							? <Image source={{ uri: user.image.link }} style={styles.avatar} />
-							: (
-								<View style={[styles.avatar, styles.avatarPlaceholder]}>
-									<Text style={styles.avatarInitial}>{user.login[0].toUpperCase()}</Text>
-								</View>
-							)}
+					{user.image.link
+						? <AuthenticatedImage uri={user.image.link} login={user.login} />
+						: (
+							<View style={[styles.avatar, styles.avatarPlaceholder]}>
+								<Text style={styles.avatarInitial}>
+								{user.login[0].toUpperCase()}
+								</Text>
+							</View>
+						)}
 					</View>
 					<View style={styles.heroInfo}>
 						<Text style={styles.name}>{user.displayname}</Text>

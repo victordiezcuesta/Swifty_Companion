@@ -18,7 +18,7 @@ export async function getUser(login: string, accessToken: string)
 	/*const data = await response.json();
 	console.log(JSON.stringify(data));
 	//console.log(JSON.stringify(data, null, 2));
-	return data;*/
+	return data */
 
 	return response.json();
 }
